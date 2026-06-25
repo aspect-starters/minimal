@@ -1,0 +1,21 @@
+bazel_dep(name = "rules_multitool", version = "1.11.1")
+bazel_dep(name = "bazel_env.bzl", version = "0.7.2")
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
+
+# buildifier (Starlark formatter) is always available — the `aspect buildifier`
+# task and the format.alias in .aspect/config.axl use it regardless of lint.
+bazel_dep(name = "buildifier_prebuilt", version = "8.5.1.2")
+
+# Prebuilt aspect gazelle binary (no Go toolchain needed) — provides
+# //tools/gazelle:gazelle, the default target for `aspect gazelle`.
+bazel_dep(name = "aspect_gazelle_prebuilt", version = "0.0.20")
+
+###############################################################################
+# Module extensions
+###############################################################################
+
+multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
+multitool.hub(lockfile = "//tools:tools.lock.json")
+use_repo(multitool, "multitool")
+
+register_toolchains("//bazel/toolchains:all")
